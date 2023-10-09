@@ -1,10 +1,10 @@
 import { Injectable } from "@nestjs/common";
 import { MongoClient, Db, ObjectId } from 'mongodb';
-import { MONGO_URI,DATABASE_NAME } from "utils/config";
+import { MONGO_URI,DATABASE_NAME,TABLE_NAMES } from "utils/config";
 import jwt from 'jsonwebtoken';
 
 @Injectable()
-export class mongoService{
+export class MongoService{
     private db:Db;
     private client:MongoClient;
     constructor(){
@@ -29,7 +29,7 @@ export class mongoService{
         try {
             const db = dbName ? this.client.db(dbName) : this.db;
             const collection = db.collection(collectionName);
-            const res = await collection.findOne({ _id: new ObjectId(id) });
+            const res = await collection.findOne({ id });
             return res;
         } catch (error) {
             throw new Error(error.message);
@@ -144,9 +144,9 @@ export class mongoService{
     //         if (!dbExists) {
     //             const db = client.db(dbName.toUpperCase());
     //             const collectionsToCreate = Object.values(TABLE_NAMES).filter(
-    //                 (collection) => collection !== TABLE_NAMES.TENANT_SETUP
+    //                 (collection) => collection !== TABLE_NAMES
     //             );
-    //             await Promise.all(collectionsToCreate.map((collection) => db.createCollection(collection)));
+    //             await Promise.all(collectionsToCreate.map((collection:string) => db.createCollection(collection)));
     //             console.log(`Created database ${dbName}`);
     //             creation = true;
     //         } else {

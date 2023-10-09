@@ -1,9 +1,10 @@
 import { Module } from '@nestjs/common';
 import { UserCredentialsController } from './user-credentials.controller';
-import { mongoService } from 'src/function/mongodb.service';
+import { MongoService } from 'src/function/mongodb.service';
+import { VerifyService } from 'src/function/verify.service';
 
 @Module({
   controllers: [UserCredentialsController],
-  providers: [mongoService]
+  providers: [MongoService,VerifyService]
 })
 export class UserCredentialsModule {}
