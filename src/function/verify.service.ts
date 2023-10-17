@@ -1,5 +1,6 @@
 import {Injectable} from "@nestjs/common"
 import {TWILIO_ACCOUNT_SID,TWILIO_AUTH_TOKEN,TWILIO_SERVICE_SID} from "../../utils/config"
+import * as jwt from 'jsonwebtoken';
 const client=require("twilio")(TWILIO_ACCOUNT_SID,TWILIO_AUTH_TOKEN);
 
 
@@ -44,5 +45,17 @@ export class VerifyService{
         } catch (error) {
             throw new Error(error.message)
         }
+    }
+
+    verifyToken(token: string, secret: string): Promise<any> {
+        return new Promise((resolve, reject) => {
+            jwt.verify(token, secret, (err, decoded) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(decoded);
+                }
+            });
+        });
     }
 }
